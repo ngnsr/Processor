@@ -2,12 +2,12 @@ package aos;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    // AC -- accumulator,
+
+// AC -- accumulator,
 // IR - current command,
 // r1,r2,r3,r4 - registers,
 // PS = +/-, sign of the last operation,
@@ -22,7 +22,6 @@ public class Main {
     private static int PC = 1;
     private static int TC = 0;
     private static boolean PS;
-
     private static String AC;
     private static String IR;
 
@@ -88,11 +87,10 @@ public class Main {
         }
     }
 
+    final static Scanner s = new Scanner(System.in);
     private static void waitEnter() {
-        try {
-            System.in.read();
-        } catch (IOException ignored) {
-        }
+        s.nextLine();
+            // System.in.read();
     }
 
     private static void save(final String operand) {
@@ -139,10 +137,18 @@ public class Main {
         StringBuilder sb = new StringBuilder(BITS);
         String lowByte = regBytes[regBytes.length - 1];
         int lowBit = lowByte.charAt(lowByte.length() - 1) == '1' ? 1 : 0;
-        for (int i = 0; i < regBytes.length; i++) {
-            int numberBits = ACBytes[i].length();
-            int currentBit = ACBytes[i].charAt(numberBits - 1) == '1' ? 1 : 0;
-            int m = lowBit ^ currentBit;
+        int byteIndex = 0;
+
+        // ???
+        // if(BITS % 8 > 0){
+        //     byteIndex = 1;
+        //     sb.append(AC.substring(0, BITS % 8));
+        // }
+
+        for (; byteIndex < regBytes.length; byteIndex++) {
+            int numberBits = ACBytes[byteIndex].length();
+            int currentLowBit = ACBytes[byteIndex].charAt(numberBits - 1) == '1' ? 1 : 0;
+            int m = lowBit ^ currentLowBit;
             String mString = toBin(m);
             sb.append(mString, mString.length() - numberBits, BITS);
         }
